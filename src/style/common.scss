@@ -1,0 +1,422 @@
+/*
+主题名称: 畅途网sass
+描述：样式重置以及通用样式
+作者: yanming
+版本: v1.0
+/*
+/* 0 css reset--------------------------------------------------------------------------*/
+/***css reset***/
+$talign:text-align,text-indent;
+$talignPx:center,right,left,-9999em;
+$colorZ:#333,#ff7701,#fff,#007bbb,black,#999,#f3f3f3,#000,#d6d6d6!default;
+$color:color!default;
+$family:font-family!default;
+$familycon:Arial,"\5B8B\4F53","\5FAE\8F6F\96C5\9ED1",!default;
+$margin: margin!default;
+$padding: padding!default;
+$top: top!default;
+$bottom: bottom!default;
+$left:left!default;
+$right:right!default;
+$fs:font-size!default;
+@mixin display($display:block,$ie7:false){
+  @if $ie7{
+    _display:inline;
+  }@else {
+    display:$display;
+  }
+}
+/*
+一级MapKey说明
+(l:表示marginLeft
+r:表示marginRight
+b:表示marginBottom
+t:表示marginTop
+p:表示padding(1:表示paddingLeft,t:表示paddingTop,r:表示paddingRight,b:表示paddingBottom)
+fs:表示fontSize
+)
+*/
+$mglp-list:(l:(5,10,15,20),
+  r:(5,10,15,20),
+  b:(5,10,15,20,30,100),
+  t:(5,2,8,15,10,15,20,25,30,40,50),
+  p:(l:(10,5),t:(2,10,15,20,25,50),r:(10),b:(10,30,100)),
+  fs:(10,12,13,14,15,16,18,20,22,24,30)
+);
+
+html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+body{ background:nth($colorZ,7);}
+blockquote,html,body,div,ul,ol,li,dl,dt,dd,fieldset,form,h1,h2,h3,h4,h5,h6,hr,legend,pre,p,td,th,textarea,input,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0;}
+body,button,input,select,textarea{color:nth($colorZ,1);font:12px/1.5 nth($familycon,3);}
+h1,h2,h3,h4,h5,h6{#{$fs}:100%;font-weight:500;}
+address,caption,code,cite,dfn,em,var{font-style:normal;font-weight:500;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,iframe{@include display;}
+ol,ul{list-style:none;}
+a{text-decoration:none;color:nth($colorZ,1);;outline:none;}
+a:hover{text-decoration:underline;}
+input[type=button],input[type=text]{-webkit-appearance:none; outline:none;}
+input:focus{ outline:none;}
+input[type=button],input[type=checkbox],input[type=radio]{outline:none;}
+sup{vertical-align:text-top;}
+sub{vertical-align:text-bottom;}
+del{text-decoration:line-through;}
+legend{color:nth($colorZ,8);;}
+fieldset,img{border:0 none;}
+img,input{vertical-align:middle;}
+button,input,select,textarea{font-size:100%;vertical-align:middle;outline:0}
+table{border-collapse:collapse;border-spacing:0;}
+th{text-align:inherit;}
+s{text-decoration:none;}
+i{font-style:normal;}
+input::-ms-clear{@include display($display:none);}
+a:hover{text-decoration:none;}
+.posRel{position:relative;*zoom:1;}
+::-webkit-input-placeholder{color:nth($colorZ,9);}
+.relative{ position:relative;}
+html,body{-webkit-overflow-scrolling: touch; }
+/* 1 通用样式--------------------------------------------------------------------------*/
+/***common class***/
+.clearfix {
+  *zoom: 1;
+  &:after {
+    content: "";
+    clear: both;
+    @include display;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+  }
+}
+.clear{clear:both;@include display; height:0;line-height:0;font-size:0;overflow:hidden;visibility:hidden;}
+.bold{ font-weight:bold;}
+.border_blue{ border:1px solid #007bbb !important;}
+.show{@include display;}
+.hide{@include display($display:none,$ie7:true);}
+.left{float:$left;@include display($display:none,$ie7:true);}
+.right{float:$right;}
+.center{#{nth($talign,1)}:#{nth($talignPx,1)};}
+.boxSb{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+/*common width*/
+.auto{margin:0 auto;}
+/***common link***/
+a.link_blue {
+  &:link, &:visited {
+    color: #007bbb;
+    text-decoration: none;
+  }
+  &:hover, &:active {
+    text-decoration: underline;
+  }
+}
+/*common margin and padding*/
+@each $key,$class in $mglp-list{
+  @each  $kk in $class{
+    //表示字体
+      @if $key==fs{
+        .font#{$kk}{
+          #{$fs}:#{$kk}px
+        }
+        //表示marginLeft
+      }@else if $key == l{
+        .mg#{$key}#{$kk}{
+          #{$margin}-#{$left}:#{$kk}px
+        }
+        //表示marginRight
+      }@else if $key ==r{
+        .mg#{$key}#{$kk}{
+          #{$margin}-#{$right}:#{$kk}px
+        }
+        //表示marginTop
+      }@else if $key ==t{
+        .mg#{$key}#{$kk}{
+          #{$margin}-#{$top}:#{$kk}px
+        }
+        //表示marginBottom
+      }@else if $key ==b{
+        .mg#{$key}#{$kk}{
+          #{$margin}-#{$bottom}:#{$kk}px
+        }
+      }
+  }
+  //表示padding  这个特殊因为padding中包含四个方向，所以要另作循环
+@if($key==p){
+  @each$pkey ,$zi in $class{
+    //表示paddingLeft
+    @if $pkey==l{
+      @each $z in $zi{
+        .pd#{$pkey}#{$z}{
+          #{$padding}-#{$left}:#{$z}px
+        }
+      }
+      //表示paddingTop
+    }@else if $pkey==t{
+      @each $z in $zi{
+        .pd#{$pkey}#{$z}{
+          #{$padding}-#{$top}:#{$z}px
+        }
+      }
+      //表示paddingRight
+    }@else if $pkey==r{
+      @each $z in $zi{
+        .pd#{$pkey}#{$z}{
+          #{$padding}-#{$right}:#{$z}px
+        }
+      }
+      //表示paddingBottom
+    }@else if $pkey==b{
+      @each $z in $zi{
+        .pd#{$pkey}#{$z}{
+          #{$padding}-#{$bottom}:#{$z}px
+        }
+      }
+    }
+  }
+}
+}
+$px:0 2px,10px 5px,10px,0 10px,12px !default;
+.pdlr2{#{$padding}:nth($px,1);}
+.pd5-10{#{$padding}:nth($px,2);}
+.pd10{ #{$padding}:nth($px,3);}
+.pdlr10{#{$padding}:nth($px,4);}
+.pd12{#{$padding}:nth($px,5);}
+/*common font-color*/
+.font_gray333{#{$color}:nth($colorZ,1);}
+/*common font-family*/
+.font_arial{#{$family}:nth($familycon,1);}
+.font_songti{#{$family}:nth($familycon,2);}
+.font_yahei{#{$family}:nth($familycon,3);}
+/*common text-layout*/
+.txtHide{#{nth($talign,2)}:#{nth($talignPx,4)};}
+.txtCt{#{nth($talign,1)}:#{nth($talignPx,1)};}
+.txtRt{#{nth($talign,1)}:#{nth($talignPx,2)};}
+.txtLt{#{nth($talign,1)}:#{nth($talignPx,3)};}
+/*color*/
+.font_orange {#{$color}:nth($colorZ,2);}
+.bgfff{ background:nth($colorZ,3);}
+.font_blue{#{$color}:nth($colorZ,4);}
+.font_black{#{$color}:nth($colorZ,5);}
+.font_gray999{#{$color}:nth($colorZ,6);}
+
+/*button*/
+@mixin submit-main($background:#ff7600){
+  width:100%;height:45px;line-height:45px;text-align:center;border:0 none;background:$background;color:#{nth($colorZ,3)};#{$fs}:18px;border-radius:3px;
+}
+.btn_orange_submit{ @include submit-main}
+.btn_gray_submit{ @include submit-main($background:#d6d6d6)}
+
+/*arrow*/
+@mixin ico_arrow($deg:45deg){ @include display;width:6px;height:6px;border:2px solid #ccc;border-width:2px 2px 0 0;border-color:#ccc #ccc rgba(255,255,255,0) rgba(255,255,255,0);-webkit-transform:rotate($deg);-moz-transform:rotate($deg);-o-transform:rotate($deg);-ms-transform:rotate($deg);transform:rotate($deg); }
+.ico_arrow_right{@include ico_arrow;}
+.ico_arrow_left{@include ico_arrow($deg:-135deg);}
+.ico_arrow_up{@include ico_arrow($deg:-45deg);}
+.ico_arrow_down{@include ico_arrow($deg:-135deg);}
+
+/*到达城市、出发城市*/
+@mixin depart($borderColor:#ff7600){
+  display:inline-block;width:15px;height:15px;line-height:15px;border-radius:50%;#{fs}:12px;#{nth($talign,1)}:#{nth($talignPx,1)};
+  border:1px solid $borderColor;color:$borderColor;
+}
+.ico_depart{@include depart; }
+.ico_arrive{@include depart($borderColor:#00b168);}
+.ico_teminal{@include depart($borderColor:#007bbb);}
+
+/*单选框*/
+%ir{
+  width:20px; height:20px;
+}
+.radio_switch{@include display($display:none);}
+.radio_switch_slider{
+  @extend %ir;
+  @include display;
+  .r_swi_check{display:inline-block;@extend %ir; background:nth($colorZ,3); border:1px solid #ccc; border-radius:50%;margin-right:10px; font-size:16px;}
+  span{@extend %ir; position:relative;}
+}
+.radio_switch:checked + .radio_switch_slider .r_swi_check:before{position:absolute;content:'';top:3px; left:2px;@include display;width:13px; height:8px; border-left:1px solid nth($colorZ,3); border-bottom:1px solid nth($colorZ,3); -webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);-o-transform:rotate(-45deg);transform:rotate(-45deg);}
+.radio_switch:checked +.radio_switch_slider .r_swi_check{border:1px solid #ec8a4d; background:#ec8a4d;}
+/*惊叹号*/
+.icoI{ color:#007bbb; position:relative; border:solid 1px #007bbb; border-radius:50%; width:12px; height:12px; display:inline-block; top:2px;margin-left:5px;
+&:after{content:"i";position:absolute;left:4.5px;top:-3px;}
+}
+/*红色小减号*/
+.icon_mall_down{ position:relative;@include display;height:15px; width:15px; border-radius:50%; border:1px solid #ff0000;
+&:before{position:absolute; content:"";top:7px; left:1px;width:13px; height:1px; background:#ff0000;}
+}
+.col_red{ color:#ff0000;}
+/*webapp dialog*/
+@mixin  pobg($positionn:absolute,$leftn:0,$topn:0,$widthn:100%,$backgroundn: rgba(0, 0, 0, 0.3)){
+  position:$positionn;
+  left: $leftn;
+  top: $topn;
+  width: $widthn;
+  height:400%;
+  background:$backgroundn;
+}
+.webapp_dialog {
+  .wdialog_mask {
+    @include  pobg;
+    z-index: 333;
+  }
+  .wdialog_main {
+    @include  pobg($positionn:fixed,$leftn:35%,$topn:6.25%,$widthn:87.5%,$backgroundn:#fff);
+    font-size: 15px;
+    border-radius: 5px;
+    z-index: 100000;
+  }
+  .wdialog_content {
+    line-height: 25px;
+    padding: 15px 10px;
+    text-align: center;
+  }
+  .wdialog_operate {
+    height: 45px;
+    border-top: 1px solid #ccc;
+    display: -webkit-box;
+  }
+  .wdialog_operateNEW {
+    height: 45px;
+    border-top: 1px solid #ccc;
+    display: -webkit-box;
+    background: #f2f2f2;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .wdialog_btn {
+    &:nth-of-type(2) {
+      border-left: solid 1px #ccc;
+    }
+    -webkit-box-flex: 1;
+    @include display;
+    #{nth($talign,1)}:#{nth($talignPx,1)};
+    height: 45px;
+    line-height: 45px;
+    color: #007bbb;
+    width: 100%;
+  }
+  .wdialog_close {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    background: nth($colorZ,3);
+    border-radius: 50%;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -7px;
+      width: 14px;
+      height: 1px;
+      background: #1d8ac3;
+      -webkit-transform: rotate(45deg);
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -7px;
+      width: 14px;
+      height: 1px;
+      background: #1d8ac3;
+      -webkit-transform: rotate(45deg);
+      -webkit-transform: rotate(-45deg);
+    }
+  }
+  .wdialog_btn {
+    &.Newbtn {
+      color: nth($colorZ,1);
+    }
+    &.Neworange {
+      color: #ff7600;
+    }
+  }
+}
+.transition{-webkit-transition:-webkit-transform .25s ease;}
+.buyKnow {
+  position: fixed;
+  top: 44px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  color: nth($colorZ,3);
+  @include display($display:none);
+  overflow: auto;
+}
+
+.buyKnowshow {
+  @include display;
+}
+.buyKnow dl {
+  padding: 50px 0 100px;
+  dt {
+    #{nth($talign,1)}:#{nth($talignPx,1)};
+    font-size: 18px;
+    padding: 10px;
+  }
+  dd {
+    font-size: 16px;
+    position: relative;
+    padding: 0px 10px;
+    p {
+      display: inline;
+    }
+  }
+}
+/*头部*/
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 44px;
+  min-width: 320px;
+  background: #fdfdfd;
+  z-index: 200002;
+  padding: 0 55px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e5e5e5;
+  h1 {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    #{nth($talign,1)}:#{nth($talignPx,1)};
+    #{$fs}: 18px;
+    #{$color}:#{nth($colorZ,1)};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.ico_back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 54px;
+  height: 44px;
+  &:before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    left: 50%;
+    top: 50%;
+    margin-top: -7px;
+    margin-left: -7px;
+    border-left: 2px solid #4d4d4d;
+    border-top: 2px solid #4d4d4d;
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+}
+
+.header_fixed_placeholder {
+  height: 44px;
+}
